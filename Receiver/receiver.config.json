@@ -1,0 +1,63 @@
+{
+  "PROD": {
+    "multicastGroup": "239.1.1.1",
+    "multicastPort": 10001,
+    "multicastInterface": "0.0.0.0",
+    "localBindAddress": "0.0.0.0",
+    "expectedSession": "PSE_MDF_01",
+    "requestServers": [
+      {
+        "host": "192.168.1.100",
+        "port": 10002
+      }
+    ],
+    "mdfUser": "user",
+    "mdfPassword": "password"
+  },
+  "DR": {
+    "multicastGroup": "239.2.2.2",
+    "multicastPort": 10001,
+    "multicastInterface": "0.0.0.0",
+    "localBindAddress": "0.0.0.0",
+    "expectedSession": "PSE_MDF_01",
+    "requestServers": [
+      {
+        "host": "192.168.2.100",
+        "port": 10002
+      }
+    ],
+    "mdfUser": "user",
+    "mdfPassword": "password"
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "db": 0,
+    "password": ""
+  },
+  "storage": {
+    "packetFilePrefix": "packet_",
+    "messagesFilePrefix": "messages_",
+    "flushIntervalMs": 1000
+  },
+  "logging": {
+    "level": "info",
+    "maxSize": "20m",
+    "maxFiles": "14d"
+  },
+  "socketIO": {
+    "port": 3000
+  },
+  "tcpRelay": {
+    "port": 4000,
+    "idleTimeoutMs": 30000
+  },
+  "tcpRetrans": {
+    "port": 5000,
+    "maxRange": 10000
+  },
+  "performance": {
+    "maxMemoryPackets": 10000,
+    "maxMemoryMessages": 50000
+  }
+}

@@ -1,0 +1,8 @@
+node_modules/
+*.log
+data/packets/*
+data/messages/*
+logs/*
+!data/packets/.gitkeep
+!data/messages/.gitkeep
+!logs/.gitkeep
