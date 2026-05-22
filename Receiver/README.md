@@ -4,6 +4,14 @@ A Node.js application that interfaces with the PSE New Trading System MDF Server
 
 ## Usage
 
+First, install the required dependencies:
+
+```bash
+npm install
+```
+
+Then, run the application:
+
 ```bash
 node src/index.js PROD RETRANS:ON START:Y JP
 ```
