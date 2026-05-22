@@ -16,6 +16,7 @@ const TcpRelayServer = require('./network/tcpRelayServer');
 const TcpRetransServer = require('./network/tcpRetransServer');
 const { parseDownstreamPacket } = require('./moldudp64/parseDownstreamPacket');
 const { parseMessageBlocks } = require('./moldudp64/parseMessageBlocks');
+const { bigintStringify } = require('./utils/bigintJson');
 
 async function main() {
   const args = validateArgs(process.argv.slice(2));
@@ -95,6 +96,10 @@ async function main() {
 
     // Store packet
     delete packetInfo._sequenceNumberBigInt; // not needed for json
+
+    // Log the packet to console/file
+    logger.info(`Received Packet: ${bigintStringify(packetInfo)}`);
+
     appState.addPacket(packetInfo);
     redisWriter.enqueuePacket(packetInfo);
     fileStore.enqueuePacket(packetInfo);
@@ -102,6 +107,9 @@ async function main() {
 
     // Store messages
     for (const m of messages) {
+        // Log the message to console/file
+        logger.info(`Parsed Message: ${bigintStringify(m)}`);
+
         appState.addMessage(m);
         redisWriter.enqueueMessage(m);
         fileStore.enqueueMessage(m);
