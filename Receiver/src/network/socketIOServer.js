@@ -2,10 +2,14 @@ const { Server } = require('socket.io');
 const { getLogger } = require('../logging/logger');
 const { bigintStringify } = require('../utils/bigintJson');
 
+const http = require('http');
+
 class SocketIOServer {
   constructor(config) {
     this.port = config.socketIO.port || 3000;
-    this.io = new Server({
+    this.host = config.socketIO.host || '0.0.0.0';
+    this.httpServer = http.createServer();
+    this.io = new Server(this.httpServer, {
       cors: { origin: '*' }
     });
     this.logger = getLogger();
@@ -19,13 +23,17 @@ class SocketIOServer {
       });
     });
 
-    this.io.listen(this.port);
-    this.logger.info(`Socket.IO Server listening on port ${this.port}`);
+    this.httpServer.listen(this.port, this.host, () => {
+      this.logger.info(`Socket.IO Server listening on ${this.host}:${this.port}`);
+    });
   }
 
   stop() {
     if (this.io) {
       this.io.close();
+    }
+    if (this.httpServer) {
+        this.httpServer.close();
     }
   }
 

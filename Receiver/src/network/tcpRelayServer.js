@@ -5,6 +5,7 @@ const { bigintStringify } = require('../utils/bigintJson');
 class TcpRelayServer {
   constructor(config) {
     this.port = config.tcpRelay.port || 4000;
+    this.host = config.tcpRelay.host || '0.0.0.0';
     this.idleTimeoutMs = config.tcpRelay.idleTimeoutMs || 30000;
     this.server = null;
     this.clients = new Set();
@@ -33,8 +34,8 @@ class TcpRelayServer {
       });
     });
 
-    this.server.listen(this.port, () => {
-      this.logger.info(`TCP Relay Server listening on port ${this.port}`);
+    this.server.listen(this.port, this.host, () => {
+      this.logger.info(`TCP Relay Server listening on ${this.host}:${this.port}`);
     });
   }
 

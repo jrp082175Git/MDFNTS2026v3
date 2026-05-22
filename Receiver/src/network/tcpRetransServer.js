@@ -7,6 +7,7 @@ const { getDateKey } = require('../utils/dateKey');
 class TcpRetransServer {
   constructor(config, appState) {
     this.port = config.tcpRetrans.port || 5000;
+    this.host = config.tcpRetrans.host || '0.0.0.0';
     this.maxRange = config.tcpRetrans.maxRange || 10000;
     this.server = null;
     this.logger = getLogger();
@@ -38,8 +39,8 @@ class TcpRetransServer {
       });
     });
 
-    this.server.listen(this.port, () => {
-      this.logger.info(`TCP Retrans Server listening on port ${this.port}`);
+    this.server.listen(this.port, this.host, () => {
+      this.logger.info(`TCP Retrans Server listening on ${this.host}:${this.port}`);
     });
   }
 

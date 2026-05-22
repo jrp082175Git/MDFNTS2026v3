@@ -34,6 +34,15 @@ function loadConfig() {
       if(config.DR) config.DR.multicastGroup = process.env.MULTICAST_GROUP;
   }
 
+  if (process.env.SOCKETIO_PORT) config.socketIO.port = parseInt(process.env.SOCKETIO_PORT, 10);
+  if (process.env.SOCKETIO_HOST) config.socketIO.host = process.env.SOCKETIO_HOST;
+
+  if (process.env.TCP_RELAY_PORT) config.tcpRelay.port = parseInt(process.env.TCP_RELAY_PORT, 10);
+  if (process.env.TCP_RELAY_HOST) config.tcpRelay.host = process.env.TCP_RELAY_HOST;
+
+  if (process.env.TCP_RETRANS_PORT) config.tcpRetrans.port = parseInt(process.env.TCP_RETRANS_PORT, 10);
+  if (process.env.TCP_RETRANS_HOST) config.tcpRetrans.host = process.env.TCP_RETRANS_HOST;
+
   return config;
 }
 
