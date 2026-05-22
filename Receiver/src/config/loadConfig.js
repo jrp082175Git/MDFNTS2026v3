@@ -17,21 +17,24 @@ function loadConfig() {
   if (process.env.REDIS_DB) config.redis.db = parseInt(process.env.REDIS_DB, 10);
   if (process.env.REDIS_PASSWORD !== undefined) config.redis.password = process.env.REDIS_PASSWORD;
 
-  // Global env overrides
+  // Environment-specific and global env overrides
   if (process.env.MULTICAST_INTERFACE) {
-      if(config.PROD) config.PROD.multicastInterface = process.env.MULTICAST_INTERFACE;
-      if(config.DR) config.DR.multicastInterface = process.env.MULTICAST_INTERFACE;
+      if(config.PROD) config.PROD.multicastInterface = process.env.PROD_MULTICAST_INTERFACE || process.env.MULTICAST_INTERFACE;
+      if(config.DR) config.DR.multicastInterface = process.env.DR_MULTICAST_INTERFACE || process.env.MULTICAST_INTERFACE;
   }
 
-  if (process.env.MULTICAST_PORT) {
-      const port = parseInt(process.env.MULTICAST_PORT, 10);
-      if(config.PROD) config.PROD.multicastPort = port;
-      if(config.DR) config.DR.multicastPort = port;
+  if (process.env.MULTICAST_PORT || process.env.PROD_MULTICAST_PORT) {
+      if(config.PROD) config.PROD.multicastPort = parseInt(process.env.PROD_MULTICAST_PORT || process.env.MULTICAST_PORT, 10);
+  }
+  if (process.env.MULTICAST_PORT || process.env.DR_MULTICAST_PORT) {
+      if(config.DR) config.DR.multicastPort = parseInt(process.env.DR_MULTICAST_PORT || process.env.MULTICAST_PORT, 10);
   }
 
-  if (process.env.MULTICAST_GROUP) {
-      if(config.PROD) config.PROD.multicastGroup = process.env.MULTICAST_GROUP;
-      if(config.DR) config.DR.multicastGroup = process.env.MULTICAST_GROUP;
+  if (process.env.MULTICAST_GROUP || process.env.PROD_MULTICAST_GROUP) {
+      if(config.PROD) config.PROD.multicastGroup = process.env.PROD_MULTICAST_GROUP || process.env.MULTICAST_GROUP;
+  }
+  if (process.env.MULTICAST_GROUP || process.env.DR_MULTICAST_GROUP) {
+      if(config.DR) config.DR.multicastGroup = process.env.DR_MULTICAST_GROUP || process.env.MULTICAST_GROUP;
   }
 
   if (process.env.SOCKETIO_PORT) config.socketIO.port = parseInt(process.env.SOCKETIO_PORT, 10);
