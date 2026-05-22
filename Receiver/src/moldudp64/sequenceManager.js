@@ -15,10 +15,16 @@ class SequenceManager {
 
   updateFromPacket(packetInfo) {
     if (packetInfo.packetType === "DATA") {
-       this.expectedSequence = packetInfo._sequenceNumberBigInt + BigInt(packetInfo.messageCount);
+       const nextExpected = packetInfo._sequenceNumberBigInt + BigInt(packetInfo.messageCount);
+       if (nextExpected > this.expectedSequence) {
+           this.expectedSequence = nextExpected;
+       }
        // latest message block sequence is the sequence of the last message in the packet
        if (packetInfo.messageCount > 0) {
-           this.latestMessageBlockSequence = packetInfo._sequenceNumberBigInt + BigInt(packetInfo.messageCount - 1);
+           const latestMsgSeq = packetInfo._sequenceNumberBigInt + BigInt(packetInfo.messageCount - 1);
+           if (latestMsgSeq > this.latestMessageBlockSequence) {
+               this.latestMessageBlockSequence = latestMsgSeq;
+           }
        }
     }
   }

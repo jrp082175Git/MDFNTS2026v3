@@ -23,6 +23,17 @@ function loadConfig() {
       if(config.DR) config.DR.multicastInterface = process.env.MULTICAST_INTERFACE;
   }
 
+  if (process.env.MULTICAST_PORT) {
+      const port = parseInt(process.env.MULTICAST_PORT, 10);
+      if(config.PROD) config.PROD.multicastPort = port;
+      if(config.DR) config.DR.multicastPort = port;
+  }
+
+  if (process.env.MULTICAST_GROUP) {
+      if(config.PROD) config.PROD.multicastGroup = process.env.MULTICAST_GROUP;
+      if(config.DR) config.DR.multicastGroup = process.env.MULTICAST_GROUP;
+  }
+
   return config;
 }
 

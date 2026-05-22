@@ -56,9 +56,29 @@ class TcpRelayServer {
 
     for (const client of this.clients) {
       // Basic backpressure handling
+      if (client._isPaused) {
+        if (!client._queue) client._queue = [];
+        client._queue.push(line);
+        if (client._queue.length > 50000) {
+            this.logger.warn(`TCP Relay client too slow, dropping connection: ${client.remoteAddress}:${client.remotePort}`);
+            client.destroy();
+        }
+        continue;
+      }
+
       if (!client.write(line)) {
-        // TCP buffer full, it will drain eventually.
-        // We could disconnect if it builds up too much.
+        client._isPaused = true;
+        if (!client._queue) client._queue = [];
+
+        client.once('drain', () => {
+          client._isPaused = false;
+          while (client._queue && client._queue.length > 0 && !client._isPaused) {
+            const nextLine = client._queue.shift();
+            if (!client.write(nextLine)) {
+               client._isPaused = true;
+            }
+          }
+        });
       }
     }
   }

@@ -60,7 +60,7 @@ async function main() {
   tcpRelayServer.start();
   tcpRetransServer.start();
 
-  multicastReceiver.onMessage((msg, rinfo) => {
+  const handleIncomingPacket = (msg, rinfo) => {
     const packetInfo = parseDownstreamPacket(msg, rinfo);
 
     if (packetInfo.status !== "OK") {
@@ -90,6 +90,9 @@ async function main() {
 
     const messages = parseMessageBlocks(msg, packetInfo);
 
+    // Update sequence before deleting _sequenceNumberBigInt
+    seqManager.updateFromPacket(packetInfo);
+
     // Store packet
     delete packetInfo._sequenceNumberBigInt; // not needed for json
     appState.addPacket(packetInfo);
@@ -105,8 +108,6 @@ async function main() {
         tcpRelayServer.broadcastMessage(m);
     }
 
-    seqManager.updateFromPacket(packetInfo);
-
     if (packetInfo.packetType === 'END_OF_SESSION') {
         logger.info("End of Session packet received.");
         tcpRelayServer.broadcastMessage({
@@ -120,7 +121,10 @@ async function main() {
             msgType: 'H'
         });
     }
-  });
+  };
+
+  multicastReceiver.onMessage(handleIncomingPacket);
+  retransClient.onMessage(handleIncomingPacket);
 
   multicastReceiver.start();
 }

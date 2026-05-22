@@ -75,14 +75,32 @@ class TcpRetransServer {
       const messages = [];
       const redis = getRedisClient();
 
+      // Simple binary search or filter could be used if messages is large
+      // For simplicity, find in in-memory array first
+      const memMessages = this.appState.getMessageArray().filter(m => m && m.sequence && BigInt(m.sequence) >= bSeq && BigInt(m.sequence) <= eSeq);
+
+      const foundSeqs = new Set(memMessages.map(m => BigInt(m.sequence)));
+
+      for (const m of memMessages) {
+          messages.push(m);
+      }
+
       for (let seq = bSeq; seq <= eSeq; seq++) {
-        // Fallback to Redis since we don't keep all messages in memory due to scale
-        const key = `MDF:${this.dateKey}:message:${seq.toString()}`;
-        const val = await redis.get(key);
-        if (val) {
-          messages.push(JSON.parse(val));
+        if (!foundSeqs.has(seq)) {
+            // Fallback to Redis
+            const key = `MDF:${this.dateKey}:message:${seq.toString()}`;
+            const val = await redis.get(key);
+            if (val) {
+              messages.push(JSON.parse(val));
+            }
         }
       }
+
+      // Sort messages by sequence number before sending
+      messages.sort((a, b) => {
+          if (!a.sequence || !b.sequence) return 0;
+          return Number(BigInt(a.sequence) - BigInt(b.sequence));
+      });
 
       const response = {
         socketClientID,

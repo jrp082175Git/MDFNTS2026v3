@@ -8,6 +8,21 @@ class RetransmissionClient {
     this.socket = dgram.createSocket('udp4');
     this.logger = getLogger();
     this.serverIndex = 0;
+    this.onMessageCallback = null;
+  }
+
+  onMessage(callback) {
+    this.onMessageCallback = callback;
+
+    this.socket.on('message', (msg, rinfo) => {
+      if (this.onMessageCallback) {
+        this.onMessageCallback(msg, rinfo);
+      }
+    });
+
+    this.socket.on('error', (err) => {
+      this.logger.error(`Retransmission UDP Socket error: ${err.message}`);
+    });
   }
 
   requestMissingPackets(session, expectedSequence, gapCount) {

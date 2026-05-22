@@ -88,14 +88,14 @@ class RedisWriter {
     // A better approach for START:Y would be scanning, but we'll delete the main lists and known state.
     await redis.del([packetsKey, messagesKey]);
 
-    let cursor = '0';
+    let cursor = 0;
     do {
       const res = await redis.scan(cursor, { MATCH: `MDF:${this.dateKey}:message:*`, COUNT: 1000 });
       cursor = res.cursor;
       if (res.keys.length > 0) {
           await redis.del(res.keys);
       }
-    } while (cursor !== '0');
+    } while (cursor !== 0 && cursor !== '0');
   }
 }
 
