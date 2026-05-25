@@ -13,14 +13,15 @@ npm install
 Then, run the application:
 
 ```bash
-node src/index.js PROD RETRANS:ON START:Y JP
+node src/index.js PROD RETRANS:ON START:Y DISPLAY:OFF JP
 ```
 
 Arguments:
 1. `PROD` or `DR`
 2. `RETRANS:ON` or `RETRANS:OFF`
 3. `START:Y` (start fresh) or `START:N` (reload from data files)
-4. User initials (comma-separated, e.g., `JP,MP`)
+4. `DISPLAY:ON` (log packet bodies to verify receipt) or `DISPLAY:OFF`
+5. User initials (comma-separated, e.g., `JP,MP`)
 
 ## Configuration
 

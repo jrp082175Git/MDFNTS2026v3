@@ -4,7 +4,7 @@
   "description": "Node.js application that interfaces with the PSE New Trading System MDF Server Feed using MoldUDP64 over UDP multicast.",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js PROD RETRANS:ON START:Y JP",
+    "start": "node src/index.js PROD RETRANS:ON START:Y DISPLAY:OFF JP",
     "test": "node tests/parser.test.js"
   },
   "dependencies": {

@@ -97,8 +97,10 @@ async function main() {
     // Store packet
     delete packetInfo._sequenceNumberBigInt; // not needed for json
 
-    // Log the packet to console/file
-    logger.info(`Received Packet: ${bigintStringify(packetInfo)}`);
+    // Log the packet to console/file if enabled
+    if (args.displayLog) {
+        logger.info(`Received Packet: ${bigintStringify(packetInfo)}`);
+    }
 
     appState.addPacket(packetInfo);
     redisWriter.enqueuePacket(packetInfo);
@@ -107,8 +109,10 @@ async function main() {
 
     // Store messages
     for (const m of messages) {
-        // Log the message to console/file
-        logger.info(`Parsed Message: ${bigintStringify(m)}`);
+        // Log the message to console/file if enabled
+        if (args.displayLog) {
+            logger.info(`Parsed Message: ${bigintStringify(m)}`);
+        }
 
         appState.addMessage(m);
         redisWriter.enqueueMessage(m);
