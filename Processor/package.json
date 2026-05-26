@@ -1,0 +1,17 @@
+{
+  "name": "processor",
+  "version": "1.0.0",
+  "description": "Node.js Processor application for ITCH/MDF project.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js RETRANS:ON START:Y DISPLAY:OFF JP",
+    "test": "node tests/processor.test.js"
+  },
+  "dependencies": {
+    "redis": "^4.6.13",
+    "socket.io": "^4.7.4",
+    "winston": "^3.12.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "dotenv": "^16.4.5"
+  }
+}

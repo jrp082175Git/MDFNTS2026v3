@@ -1,0 +1,10 @@
+node_modules/
+*.log
+data/lMessages/*.jsonl
+data/pMessages/*.jsonl
+data/state/*.json
+logs/*
+!data/lMessages/.gitkeep
+!data/pMessages/.gitkeep
+!data/state/.gitkeep
+!logs/.gitkeep

@@ -1,0 +1,42 @@
+{
+  "receiver": {
+    "relayHost": "127.0.0.1",
+    "relayPort": 4000,
+    "retransHost": "127.0.0.1",
+    "retransPort": 5000,
+    "reconnectIntervalMs": 1000,
+    "maxReconnectIntervalMs": 30000
+  },
+  "processor": {
+    "socketIOHost": "0.0.0.0",
+    "socketIOPort": 9100,
+    "relayTcpHost": "0.0.0.0",
+    "relayTcpPort": 9101,
+    "retransTcpHost": "0.0.0.0",
+    "retransTcpPort": 9102
+  },
+  "redis": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 6379,
+    "password": "",
+    "db": 0,
+    "keyPrefix": "ITCH:PROCESSOR"
+  },
+  "storage": {
+    "basePath": "./data",
+    "useJsonLines": true,
+    "flushIntervalMs": 1000
+  },
+  "performance": {
+    "maxQueueSize": 500000,
+    "batchSize": 1000,
+    "workerIntervalMs": 1,
+    "maxRetransRange": 10000,
+    "slowClientMaxBufferBytes": 10485760
+  },
+  "logging": {
+    "level": "info",
+    "path": "./logs"
+  }
+}
