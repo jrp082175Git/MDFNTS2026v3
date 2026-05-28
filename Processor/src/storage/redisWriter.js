@@ -69,8 +69,8 @@ class RedisWriter {
       for (const msg of pMsgs) {
         const str = bigintStringify(msg);
         multi.rPush(pListKey, str);
-        if (msg.pSequence) {
-          multi.set(`${this.keyPrefix}:${this.dateKey}:pMessage:${msg.pSequence}`, str);
+        if (msg.seqNo) {
+          multi.set(`${this.keyPrefix}:${this.dateKey}:pMessage:${msg.seqNo}`, str);
         }
       }
 

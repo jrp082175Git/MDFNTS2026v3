@@ -15,15 +15,17 @@ function testQueue() {
 
 function testProprietaryBuilder() {
   const appState = new AppState();
+  appState.timeStamp = "2026-05-26T00:00:00.000Z";
   const builder = new ProprietaryMessageBuilder(appState);
 
-  const mdfMsg = { sequence: "100", msgType: "b" };
-  const pMsg = builder.build(mdfMsg, { price: 10 });
+  const mdfMsg = { sequence: "100", msgType: "b", price: 10 };
+  const pMsg = builder.build(mdfMsg);
 
-  assert.strictEqual(pMsg.pSequence, "1");
+  assert.strictEqual(pMsg.seqNo, "1");
   assert.strictEqual(pMsg.sourceSequence, "100");
-  assert.strictEqual(pMsg.proprietaryMsgType, "BROKER_MBP");
-  assert.strictEqual(pMsg.payload.price, 10);
+  assert.strictEqual(pMsg.msgType, 111);
+  assert.strictEqual(pMsg.price, 10);
+  assert.strictEqual(pMsg.timeStamp, "2026-05-26T00:00:00.000Z");
   console.log("testProprietaryBuilder passed");
 }
 

@@ -1,26 +1,36 @@
-function handleSecondsMessage(message) { return {}; }
-function handleOrderBookDirectoryMessage(message) { return {}; }
-function handleOrderBookDirectoryExtensionMessage(message) { return {}; }
-function handleExchangeDirectoryMessage(message) { return {}; }
-function handleMarketDirectoryMessage(message) { return {}; }
-function handleCombinationOrderBookLegMessage(message) { return {}; }
-function handleTickSizeTableMessage(message) { return {}; }
-function handleCorporateActionEntryMessage(message) { return {}; }
-function handleSystemEventMessage(message) { return {}; }
-function handleOrderBookStateMessage(message) { return {}; }
-function handleEquilibriumPriceMessage(message) { return {}; }
-function handleMarketByPriceMessage(message) { return {}; }
-function handleTradeStatisticsMessage(message) { return {}; }
-function handleReferencePriceMessage(message) { return {}; }
-function handleIndexPriceMessage(message) { return {}; }
-function handleOpenInterestMessage(message) { return {}; }
-function handleTradeTickerMessage(message) { return {}; }
-function handlePriceLimitsMessage(message) { return {}; }
-function handleCircuitBreakerTriggerMessage(message) { return {}; }
-function handleIndicativeQuoteMessage(message) { return {}; }
-function handleMarketAnnouncementMessage(message) { return {}; }
-function handleHeartbeatMessage(message) { return null; /* heartbeats generally don't yield business logic by default */ }
-function handleUnknownMessage(message) { return null; }
+function UNIXTimeToDateTime(seconds) {
+  return new Date(seconds * 1000).toISOString();
+}
+
+function handleSecondsMessage(message, appState) {
+  if (message.second) {
+      appState.timeStamp = UNIXTimeToDateTime(message.second);
+  }
+  return null;
+}
+
+function handleOrderBookDirectoryMessage(message, appState) { return message; }
+function handleOrderBookDirectoryExtensionMessage(message, appState) { return message; }
+function handleExchangeDirectoryMessage(message, appState) { return message; }
+function handleMarketDirectoryMessage(message, appState) { return message; }
+function handleCombinationOrderBookLegMessage(message, appState) { return message; }
+function handleTickSizeTableMessage(message, appState) { return message; }
+function handleCorporateActionEntryMessage(message, appState) { return message; }
+function handleSystemEventMessage(message, appState) { return message; }
+function handleOrderBookStateMessage(message, appState) { return message; }
+function handleEquilibriumPriceMessage(message, appState) { return message; }
+function handleMarketByPriceMessage(message, appState) { return message; }
+function handleTradeStatisticsMessage(message, appState) { return message; }
+function handleReferencePriceMessage(message, appState) { return message; }
+function handleIndexPriceMessage(message, appState) { return message; }
+function handleOpenInterestMessage(message, appState) { return message; }
+function handleTradeTickerMessage(message, appState) { return message; }
+function handlePriceLimitsMessage(message, appState) { return message; }
+function handleCircuitBreakerTriggerMessage(message, appState) { return message; }
+function handleIndicativeQuoteMessage(message, appState) { return message; }
+function handleMarketAnnouncementMessage(message, appState) { return message; }
+function handleHeartbeatMessage(message, appState) { return message; }
+function handleUnknownMessage(message, appState) { return null; }
 
 module.exports = {
   handleSecondsMessage,

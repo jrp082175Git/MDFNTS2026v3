@@ -26,7 +26,7 @@ class ProcessorEngine {
 
       // 1. Process Message Logic
       // Route it to appropriate handler
-      const propPayload = routeMessage(message);
+      const handledMessage = routeMessage(message, this.appState);
 
       // 2. Persist LMessage
       this.appState.addLMessage(message);
@@ -39,25 +39,20 @@ class ProcessorEngine {
 
       this.socketIOServer.broadcastLMessage(message);
 
-      // 3. Generate Proprietary Message if payload exists
-      if (propPayload) {
-         // Create single or multiple if the payload is an array
-         const payloads = Array.isArray(propPayload) ? propPayload : [propPayload];
+      // 3. Generate Proprietary Message if returned from handler
+      if (handledMessage) {
+         const pMsg = this.propBuilder.build(handledMessage);
+         if (pMsg) {
+             this.appState.addPMessage(pMsg);
+             this.redisWriter.enqueuePMessage(pMsg);
+             this.fileStore.enqueuePMessage(pMsg);
 
-         for (const payload of payloads) {
-             const pMsg = this.propBuilder.build(message, payload);
-             if (pMsg) {
-                 this.appState.addPMessage(pMsg);
-                 this.redisWriter.enqueuePMessage(pMsg);
-                 this.fileStore.enqueuePMessage(pMsg);
-
-                 if (this.args.displayLog) {
-                   this.logger.info(`PMessage Generated: ${bigintStringify(pMsg)}`);
-                 }
-
-                 this.socketIOServer.broadcastPMessage(pMsg);
-                 this.processorRelayServer.broadcastMessage(pMsg);
+             if (this.args.displayLog) {
+               this.logger.info(`PMessage Generated: ${bigintStringify(pMsg)}`);
              }
+
+             this.socketIOServer.broadcastPMessage(pMsg);
+             this.processorRelayServer.broadcastMessage(pMsg);
          }
       }
 

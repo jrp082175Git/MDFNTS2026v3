@@ -8,9 +8,12 @@ class AppState {
     // Limits
     this.maxMemoryMessages = 50000;
 
-    this.proprietaryOutputSequence = BigInt(0);
+    this.genSeqNo = BigInt(0);
     this.expectedInputSequence = BigInt(1);
     this.latestProcessedInputSequence = BigInt(0);
+
+    this.orderBookList = [];
+    this.timeStamp = null;
   }
 
   addLMessage(m) {
@@ -45,16 +48,18 @@ class AppState {
     return this.lMessages.slice(this._lHead);
   }
 
-  incrementProprietaryOutputSequence() {
-    this.proprietaryOutputSequence++;
-    return this.proprietaryOutputSequence;
+  incrementGenSeqNo() {
+    this.genSeqNo++;
+    return this.genSeqNo;
   }
 
   getState() {
     return {
       expectedInputSequence: this.expectedInputSequence.toString(),
       latestProcessedInputSequence: this.latestProcessedInputSequence.toString(),
-      proprietaryOutputSequence: this.proprietaryOutputSequence.toString(),
+      genSeqNo: this.genSeqNo.toString(),
+      timeStamp: this.timeStamp,
+      orderBookList: this.orderBookList,
       updatedAt: new Date().toISOString()
     };
   }
@@ -62,7 +67,9 @@ class AppState {
   setState(stateObj) {
     if (stateObj.expectedInputSequence) this.expectedInputSequence = BigInt(stateObj.expectedInputSequence);
     if (stateObj.latestProcessedInputSequence) this.latestProcessedInputSequence = BigInt(stateObj.latestProcessedInputSequence);
-    if (stateObj.proprietaryOutputSequence) this.proprietaryOutputSequence = BigInt(stateObj.proprietaryOutputSequence);
+    if (stateObj.genSeqNo) this.genSeqNo = BigInt(stateObj.genSeqNo);
+    if (stateObj.timeStamp !== undefined) this.timeStamp = stateObj.timeStamp;
+    if (stateObj.orderBookList !== undefined) this.orderBookList = stateObj.orderBookList;
   }
 
   clear() {
@@ -70,9 +77,11 @@ class AppState {
     this.pMessages = [];
     this._lHead = 0;
     this._pHead = 0;
-    this.proprietaryOutputSequence = BigInt(0);
+    this.genSeqNo = BigInt(0);
     this.expectedInputSequence = BigInt(1);
     this.latestProcessedInputSequence = BigInt(0);
+    this.orderBookList = [];
+    this.timeStamp = null;
   }
 }
 

@@ -52,18 +52,18 @@ class ProcessorRetransServer {
   async handleRequest(socket, line) {
     try {
       const req = JSON.parse(line);
-      const { socketClientID, beginSeq, endSequence } = req;
+      const { socketID, beginSequenceNo, endSequenceNo } = req;
 
-      if (!socketClientID || !beginSeq || !endSequence) {
+      if (!socketID || !beginSequenceNo || !endSequenceNo) {
         socket.write(JSON.stringify({ error: "Missing required fields" }) + '\n');
         return;
       }
 
-      const bSeq = BigInt(beginSeq);
-      const eSeq = BigInt(endSequence);
+      const bSeq = BigInt(beginSequenceNo);
+      const eSeq = BigInt(endSequenceNo);
 
       if (eSeq < bSeq) {
-        socket.write(JSON.stringify({ error: "endSequence < beginSeq" }) + '\n');
+        socket.write(JSON.stringify({ error: "endSequenceNo < beginSequenceNo" }) + '\n');
         return;
       }
 
@@ -75,8 +75,8 @@ class ProcessorRetransServer {
       const messages = [];
       const redis = getRedisClient();
 
-      const memMessages = this.appState.getPMessageArray().filter(m => m && m.pSequence && BigInt(m.pSequence) >= bSeq && BigInt(m.pSequence) <= eSeq);
-      const foundSeqs = new Set(memMessages.map(m => BigInt(m.pSequence)));
+      const memMessages = this.appState.getPMessageArray().filter(m => m && m.seqNo && BigInt(m.seqNo) >= bSeq && BigInt(m.seqNo) <= eSeq);
+      const foundSeqs = new Set(memMessages.map(m => BigInt(m.seqNo)));
 
       for (const m of memMessages) {
           messages.push(m);
@@ -95,14 +95,14 @@ class ProcessorRetransServer {
       }
 
       messages.sort((a, b) => {
-          if (!a.pSequence || !b.pSequence) return 0;
-          return Number(BigInt(a.pSequence) - BigInt(b.pSequence));
+          if (!a.seqNo || !b.seqNo) return 0;
+          return Number(BigInt(a.seqNo) - BigInt(b.seqNo));
       });
 
       const response = {
-        socketClientID,
-        beginSeq,
-        endSequence,
+        socketID,
+        beginSequenceNo,
+        endSequenceNo,
         count: messages.length,
         messages
       };
