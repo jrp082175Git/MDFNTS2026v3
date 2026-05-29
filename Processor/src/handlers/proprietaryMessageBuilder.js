@@ -37,8 +37,8 @@ class ProprietaryMessageBuilder {
 
     const genSeqNo = this.appState.incrementGenSeqNo();
 
-    // Copy all properties except msgType
-    const { msgType, ...rest } = lMessage;
+    // Copy all properties except msgType and sequence
+    const { msgType, sequence, ...rest } = lMessage;
 
     return {
       seqNo: genSeqNo.toString(),

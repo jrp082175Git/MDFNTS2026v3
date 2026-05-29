@@ -9,8 +9,26 @@ function handleSecondsMessage(message, appState) {
   return null;
 }
 
-function handleOrderBookDirectoryMessage(message, appState) { return message; }
-function handleOrderBookDirectoryExtensionMessage(message, appState) { return message; }
+function handleOrderBookDirectoryMessage(message, appState) {
+  if (message.orderBookId) {
+    const existingIdx = appState.orderBookList.findIndex(ob => ob.orderBookId === message.orderBookId);
+    if (existingIdx >= 0) {
+        appState.orderBookList[existingIdx] = { ...appState.orderBookList[existingIdx], ...message };
+    } else {
+        appState.orderBookList.push({ ...message });
+    }
+  }
+  return message;
+}
+function handleOrderBookDirectoryExtensionMessage(message, appState) {
+  if (message.orderBookId) {
+    const existingIdx = appState.orderBookList.findIndex(ob => ob.orderBookId === message.orderBookId);
+    if (existingIdx >= 0) {
+        appState.orderBookList[existingIdx] = { ...appState.orderBookList[existingIdx], ...message };
+    }
+  }
+  return message;
+}
 function handleExchangeDirectoryMessage(message, appState) { return message; }
 function handleMarketDirectoryMessage(message, appState) { return message; }
 function handleCombinationOrderBookLegMessage(message, appState) { return message; }
